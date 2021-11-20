@@ -6,6 +6,7 @@ from .models import Product
 
 # Create your views here.
 
+# list of all products API view
 class ProductsList(APIView):
     def get(self, request):
         query = Product.objects.all()

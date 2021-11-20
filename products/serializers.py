@@ -2,6 +2,7 @@ from django.db.models import fields
 from rest_framework import serializers
 from .models import Product
 
+# Product model serializer for showing list of all products using API
 class ProductSerializer(serializers.ModelSerializer):
     
     class Meta:
