@@ -37,3 +37,4 @@ class Product(models.Model):
 
 # signals
 pre_save.connect(set_product_slug, Product)
+

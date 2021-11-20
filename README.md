@@ -13,4 +13,3 @@
 * auto slug feature was added (signals.py).
 * change database columns. models.py, serializers.py files was edited.
 * signals.py file was created.
-
