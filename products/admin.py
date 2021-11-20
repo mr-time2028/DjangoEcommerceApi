@@ -3,4 +3,5 @@ from .models import Product
 
 # Register your models here.
 
+# Product model admin register and settings
 admin.site.register(Product)

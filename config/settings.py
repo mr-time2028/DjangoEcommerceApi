@@ -107,7 +107,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'Asia/Tehran'
+TIME_ZONE = 'Asia/Tehran'    # change form 'UTC' defult to 'Asia/Tehran'
 
 USE_I18N = True
 
