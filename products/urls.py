@@ -1,9 +1,7 @@
-from django.urls import path
-from django.urls import path
-from . import views
-
+from .views import PorductViewSet
+from rest_framework.routers import DefaultRouter
 
 app_name = 'products'
-urlpatterns = [
-    path('', views.ProductsList.as_view(), name='products_list')  # list of all products API url
-]
+router = DefaultRouter()
+router.register(r'', PorductViewSet, basename='product-list')   # list of all products API url router
+urlpatterns = router.urls

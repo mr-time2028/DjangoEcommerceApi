@@ -18,7 +18,7 @@ class Product(models.Model):
     product_image = models.ImageField(upload_to='iamges', blank=True, null=True)
     colors = models.CharField(max_length=100)
     product_features = models.TextField()
-    star_rating = models.IntegerField()
+    star_rating = models.CharField(max_length=10)
     percent_rating = models.CharField(max_length=10)
     price = models.IntegerField()
     discount = models.CharField(max_length=10, blank=True, null=True)
