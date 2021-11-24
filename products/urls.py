@@ -1,7 +1,8 @@
-from .views import PorductViewSet
-from rest_framework.routers import DefaultRouter
+from rest_framework import routers
+from . import views
+from django.urls import path, include
 
 app_name = 'products'
-router = DefaultRouter()
-router.register(r'', PorductViewSet, basename='product-list')   # list of all products API url router
+router = routers.DefaultRouter()
+router.register(r'products', views.ProductView, basename='products')   # Get and Post url router for ProductView
 urlpatterns = router.urls
