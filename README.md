@@ -30,3 +30,13 @@
 * add some tests to tests.py file.
 * models.py, urls.py (config), settings.py files was edited.
 * add create and retrieve Api view in views.py file.
+
+
+
+#### update 5
+* settings.py --> Add 'django_cleanup.apps.CleanupConfig' to INSTALLED_APPS.
+* admin.py --> Register 'Brand' and 'Category' models.
+* models.py --> Add 'Brand' and 'Category' models. Change modeling system (better modeling).
+* serializers.py --> Add 'create' method to make new object for 'Brand' and 'Category' models.
+* signals.py --> Update slug generator (better slug generator).
+* views.py --> Add feature to download images from received urls and set that for current object (ImageField get image just not url).

@@ -1,43 +1,31 @@
 from django.utils.text import slugify
 from django.db.models import Q
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
+from . import models
 
 
+@receiver(pre_save, sender=models.Brand)
+@receiver(pre_save, sender=models.Category)
+@receiver(pre_save, sender=models.Product)
+def set_unique_slug(sender, instance, *args, **kwargs):
+    Klass = instance.__class__  
 
-# logic for set auto slug
-def set_product_slug(sender, instance, *args, **kwargs):
-    # get the class of instance
-    global klass
-    klass = instance.__class__
+    # when we have the same two slugs, it will stick current id of instance to end of slug.
+    def stick_id_to_end(slug):
+        id = Klass.objects.latest('id').pk + 1
+        slug = f"{slug}-{id}"
+        return slug
 
-    # theory one: when slug field set manually by admin
-    if instance.slug:
-        instance.slug = slugify(instance.slug, allow_unicode=True)
-        if instance.id == None and klass.objects.filter(~Q(id=instance.id), slug=instance.slug).exists():
-            latest_id = klass.objects.latest('id').id
-            instance.slug = slugify(f'{instance.slug}-{latest_id + 1}', allow_unicode=True)
-        if klass.objects.filter(~Q(id=instance.id), slug=instance.slug).exists():
-            instance.slug = slugify(f'{instance.slug}-{instance.id}', allow_unicode=True)
-
-    # theory two: when slug field leave without slug (auto slug based on something field you wnat)
+    # admin has not left any slug so it set slug auto based on 'name' field.
     if not instance.slug:
-        def unique_slug(instance, new_slug = None):
-            if new_slug is not None:
-                slug = new_slug
-            else:
-                slug = slugify(instance.title, allow_unicode=True)    # instead 'title' you can set a field that you want to slug set based on it.
-            try:
-                if instance.id == None:
-                    id = klass.objects.latest('id').id + 1
-                if instance.id != None:
-                    id = instance.id
-            except:
-                id = '1'
-            qs_exist = klass.objects.filter(~Q(id=instance.id), slug=slug).exists()
-            if qs_exist:
-                new_slug = f'{slug}-{id}'
-                return unique_slug(instance, new_slug=new_slug)
-            return slug
-        instance.slug = unique_slug(instance)
-
-    # finally return instance with slug
-    return super(klass, instance)
+        instance.slug = slugify(instance.name, allow_unicode=True)
+        if Klass.objects.filter(slug=instance.slug).exists():
+            instance.slug = stick_id_to_end(instance.slug)
+        return super(Klass, instance)
+        
+    # when admin leave a slug.
+    instance.slug = slugify(instance.slug, allow_unicode=True)
+    if Klass.objects.filter(~Q(id=instance.id), slug=instance.slug).exists():      # ~Q(id=instance.id) --> every objects of class(model) except itself
+        instance.slug = stick_id_to_end(instance.slug)
+    return super(Klass, instance)
