@@ -8,7 +8,7 @@ class ProductTestCase(APITestCase):
     
     def test_create_product(self):
         product = {
-            'title': 'mobile test',
+            'name': 'mobile test',
             'category': 'mobile',
             'colors': 'red, yellow',
             'product_features': '4G, 5G',
