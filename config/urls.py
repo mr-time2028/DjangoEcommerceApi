@@ -21,5 +21,5 @@ from config.settings import MEDIA_ROOT
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/v1/', include('products.urls'))
+    path('api/', include('api.urls'))
 ] + static(settings.MEDIA_URL, document_root=MEDIA_ROOT)

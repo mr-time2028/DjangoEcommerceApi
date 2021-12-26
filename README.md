@@ -40,3 +40,11 @@
 * serializers.py --> Add 'create' method to make new object for 'Brand' and 'Category' models.
 * signals.py --> Update slug generator (better slug generator).
 * views.py --> Add feature to download images from received urls and set that for current object (ImageField get image just not url).
+
+
+
+#### update 6
+* change structure of application --> Add 'account' and 'api' app.
+* admin.py --> add some settings.
+* authentication system --> change default User system.
+* Brand model removed.

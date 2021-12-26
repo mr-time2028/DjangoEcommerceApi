@@ -5,7 +5,7 @@ from django.dispatch import receiver
 from . import models
 
 
-@receiver(pre_save, sender=models.Brand)
+
 @receiver(pre_save, sender=models.Category)
 @receiver(pre_save, sender=models.Product)
 def set_unique_slug(sender, instance, *args, **kwargs):
