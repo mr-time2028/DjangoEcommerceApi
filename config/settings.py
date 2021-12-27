@@ -38,10 +38,21 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'products',
     'api',
-    'account',
+    'authentication',
+
     'rest_framework',
+    'rest_framework.authtoken',
+    'dj_rest_auth',
+    'rest_framework_simplejwt',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'dj_rest_auth.registration',
+
     'django_cleanup.apps.CleanupConfig',
 ]    
 
@@ -139,4 +150,24 @@ MEDIA_ROOT = BASE_DIR / 'uploads'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # USERS ‌SETTINGS
-AUTH_USER_MODEL = 'account.User'
+AUTH_USER_MODEL = 'authentication.User'
+
+
+# Rest Framework Settings
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ]
+}
+
+REST_USE_JWT = True
+JWT_AUTH_COOKIE = 'access'
+JWT_AUTH_REFRESH_COOKIE = 'refresh'
+
+SITE_ID = 1
+
+# Email Backend Settings
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

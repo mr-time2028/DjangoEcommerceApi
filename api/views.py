@@ -34,12 +34,13 @@ class ProductViewSet(viewsets.ViewSet):
 
 
     def list(self, request):
-        serializer = self.serializer_class(self.queryset, many=True, context={"request":request})
+        products = self.queryset.filter(brand=request.user)       #‌ every user(vendor) just can see own products.
+        serializer = self.serializer_class(products, many=True, context={"request":request})
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
     def retrieve(self, request, pk=None):
-        product = get_object_or_404(self.queryset, pk=pk)
+        product = get_object_or_404(self.queryset.filter(brand=request.user), pk=pk)
         serializer = self.serializer_class(product, context={"request":request})
         return Response(serializer.data, status=status.HTTP_200_OK)
 

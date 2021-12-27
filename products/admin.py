@@ -30,7 +30,7 @@ class ProductAdmin(admin.ModelAdmin):
         'publish_status'
     )
     list_filter = (
-        'brand__brandname',
+        'brand__username',
         ('category__name', custom_titled_filter('category name')),      #‌ 'by category name' instead 'by name' (it's better to underestand).
         'stock_status',
         'publish_status',

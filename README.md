@@ -48,3 +48,9 @@
 * admin.py --> add some settings.
 * authentication system --> change default User system.
 * Brand model removed.
+
+
+
+#### update 7
+* add some filter for products.
+* use dj-rest-auth and jwt in project.

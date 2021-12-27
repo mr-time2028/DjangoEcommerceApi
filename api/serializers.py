@@ -1,11 +1,13 @@
+from django.db.models import fields
 from rest_framework import serializers
+from rest_framework.fields import CharField
 from products.models import Product, Category
 from django.utils.text import slugify
 
 
 # Product model serializer
 class ProductSerializer(serializers.ModelSerializer):
-    brand = serializers.PrimaryKeyRelatedField(source='brand.brandname', read_only=True, default=serializers.CurrentUserDefault())          # instead showing 'pk' (related to ForeignKey), showing 'brandname' of user.
+    brand = serializers.PrimaryKeyRelatedField(source='brand.username', read_only=True, default=serializers.CurrentUserDefault())          # instead showing 'pk' (related to ForeignKey), showing 'username' of user.
     category = serializers.CharField(source='category.name')                                 # instead showing 'pk' (related to ForeignKey), showing 'name' of category instance.
 
     class Meta:
