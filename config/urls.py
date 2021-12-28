@@ -19,7 +19,14 @@ from django.conf import settings
 from django.conf.urls.static import static
 from config.settings import MEDIA_ROOT
 
+from dj_rest_auth.views import PasswordResetConfirmView
+
+
+app_name = 'products'
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('api.urls'))
+    path('api/', include('api.urls')),   
+    path('api/auth/', include('dj_rest_auth.urls')),
+    path('api/auth/registration/', include('dj_rest_auth.registration.urls')),
+    path('api/auth/password/reset/confirm/<uid64>/<token>/', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),    #‌ overwrite this url for resolve a bug in dj-rest-auth package!
 ] + static(settings.MEDIA_URL, document_root=MEDIA_ROOT)

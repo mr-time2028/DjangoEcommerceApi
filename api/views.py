@@ -3,7 +3,7 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
 from .serializers import ProductSerializer
-from products.models import Product
+from products.models import Product, IPAddress
 
 import urllib.request
 from io import BytesIO
@@ -15,6 +15,24 @@ from PIL import Image
 class ProductViewSet(viewsets.ViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+
+
+    # get user ip address and save in IPAddress model
+    def get_ip_address(self, request):
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        if x_forwarded_for:
+            ip = x_forwarded_for.split(',')[0]
+        else:
+            ip = request.META.get('REMOTE_ADDR')
+
+        try:
+            ip_address = IPAddress.objects.get(ip_address=ip)
+        except:
+            ip_address = IPAddress(ip_address=ip)
+            ip_address.save()   
+
+        return ip_address
+
 
     # download image from product_image_url and save it in product_image for saving in the database.
     def download_image(self, request, product_name):
@@ -34,12 +52,16 @@ class ProductViewSet(viewsets.ViewSet):
 
 
     def list(self, request):
-        serializer = self.serializer_class(self.queryset, many=True, context={"request":request})
+        products = self.queryset.filter(brand=request.user)       #‌ every user(vendor) just can see own products.
+        serializer = self.serializer_class(products, many=True, context={"request":request})
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
     def retrieve(self, request, pk=None):
-        product = get_object_or_404(self.queryset, pk=pk)
+        product = get_object_or_404(self.queryset.filter(brand=request.user), pk=pk)
+        ip_address = self.get_ip_address(request)     #‌ get user ip address
+        if ip_address not in product.hits.all():      #‌ check this ip address visit this product before or not.
+            product.hits.add(ip_address)              # if no visit before add to hits the current ip address.
         serializer = self.serializer_class(product, context={"request":request})
         return Response(serializer.data, status=status.HTTP_200_OK)
 

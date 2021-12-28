@@ -4,6 +4,16 @@ from django.utils import timezone
 from django.utils.html import format_html
 
 
+
+# save user's ip address
+class IPAddress(models.Model):
+    ip_address = models.GenericIPAddressField()
+
+    def __str__(self):
+        return self.ip_address
+
+
+
 # abstract base model
 class BaseModel(models.Model):
     PUBLISH_STATUS_CHOICES = (
@@ -47,6 +57,7 @@ class Product(BaseModel):
     discounted_price = models.IntegerField(blank=True, null=True)                     # product price after calculating the discount
     description = models.TextField()
     stock_status = models.CharField(max_length=50, blank=True, null=True)             # condition of the product in the stock
+    hits = models.ManyToManyField(IPAddress, blank=True, related_name='hits')
 
 
     #‌ showing image instead html tags

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product, Category
+from .models import Product, Category, IPAddress
 
 
 
@@ -30,7 +30,7 @@ class ProductAdmin(admin.ModelAdmin):
         'publish_status'
     )
     list_filter = (
-        'brand__brandname',
+        'brand__username',
         ('category__name', custom_titled_filter('category name')),      #‌ 'by category name' instead 'by name' (it's better to underestand).
         'stock_status',
         'publish_status',
@@ -58,3 +58,10 @@ class CategoryAdmin(admin.ModelAdmin):
     search_fields = (
         'name',
     )
+
+
+
+# IPAddress model admin register and settings
+@admin.register(IPAddress)
+class IPAddressAdmin(admin.ModelAdmin):
+    pass

@@ -1,19 +1,19 @@
 from django.contrib import admin
-# from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.contrib.auth.admin import UserAdmin
 from .models import User
 
 
 @admin.register(User)
-class UserAdmin(admin.ModelAdmin):
+class UserAdmin(UserAdmin):      #‌ UserAdmin for adding hash password system
     list_display = (
-        'brandname', 
+        'username', 
         'email', 
         'is_active', 
         'is_staff',  
         'is_superuser'
     )
     list_filter = (
-        'brandname', 
+        'username', 
         'is_superuser',
         'is_staff',
         'is_active'
@@ -22,7 +22,7 @@ class UserAdmin(admin.ModelAdmin):
     fieldsets = (
         (
             'Personal Info', 
-            {'fields': ('brandname', 'email', 'password')}
+            {'fields': ('username', 'email', 'password')}
         ),
         (
             'Groups', 
@@ -40,7 +40,7 @@ class UserAdmin(admin.ModelAdmin):
     add_fieldsets = (
         (
             'Personal Info', 
-            {'fields': ('brandname', 'email', 'password1', 'password2')}
+            {'fields': ('username', 'email', 'password1', 'password2')}
         ),
         (
             'Permissions', 
@@ -53,6 +53,6 @@ class UserAdmin(admin.ModelAdmin):
     )
 
     search_fields = (
-        'brandname',
+        'username',
         'email'
     )
