@@ -9,6 +9,7 @@ from django.utils.text import slugify
 class ProductSerializer(serializers.ModelSerializer):
     brand = serializers.PrimaryKeyRelatedField(source='brand.username', read_only=True, default=serializers.CurrentUserDefault())          # instead showing 'pk' (related to ForeignKey), showing 'username' of user.
     category = serializers.CharField(source='category.name')                                 # instead showing 'pk' (related to ForeignKey), showing 'name' of category instance.
+    hits = serializers.IntegerField(source='hits.count', read_only=True)        #‌ return count of ip_address that see the product
 
     class Meta:
         model = Product
@@ -27,6 +28,7 @@ class ProductSerializer(serializers.ModelSerializer):
             'discounted_price',
             'description',
             'stock_status',
+            'hits',
             'publish'
         ]
 

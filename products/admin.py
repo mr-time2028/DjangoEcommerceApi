@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product, Category
+from .models import Product, Category, IPAddress
 
 
 
@@ -58,3 +58,10 @@ class CategoryAdmin(admin.ModelAdmin):
     search_fields = (
         'name',
     )
+
+
+
+# IPAddress model admin register and settings
+@admin.register(IPAddress)
+class IPAddressAdmin(admin.ModelAdmin):
+    pass
