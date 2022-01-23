@@ -59,3 +59,9 @@
 
 #### update 8
 * add view(hit) counter system for products.
+
+
+
+### update 9
+* Add vendor field to 'product' model.
+* Fix some bugs.

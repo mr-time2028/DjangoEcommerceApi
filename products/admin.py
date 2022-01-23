@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product, Category, IPAddress
+from .models import Product, Category, IPAddress, Brand
 
 
 
@@ -18,6 +18,7 @@ class ProductAdmin(admin.ModelAdmin):
     list_display = (
         'name',
         'show_product_image',    #‌ method in models.py
+        'vendor',
         'brand',
         'category',
         'star_rating',  
@@ -30,8 +31,9 @@ class ProductAdmin(admin.ModelAdmin):
         'publish_status'
     )
     list_filter = (
-        'brand__username',
+        'vendor__username',
         ('category__name', custom_titled_filter('category name')),      #‌ 'by category name' instead 'by name' (it's better to underestand).
+        ('brand__name', custom_titled_filter('brand name')),
         'stock_status',
         'publish_status',
         'publish'
@@ -58,6 +60,24 @@ class CategoryAdmin(admin.ModelAdmin):
     search_fields = (
         'name',
     )
+
+
+
+# Brand model admin register and settings
+@admin.register(Brand)
+class BrandAdmin(admin.ModelAdmin):
+    list_display = (
+        'name', 
+        'publish', 
+        'publish_status'
+    )
+    list_filter = (
+        'publish',
+        'publish_status'
+    )
+    search_fields = (
+        'name',
+    ) 
 
 
 

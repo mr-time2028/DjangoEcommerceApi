@@ -1,3 +1,5 @@
+from lib2to3.pytree import Base
+from tabnanny import verbose
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils import timezone
@@ -42,20 +44,25 @@ class Category(BaseModel):
         verbose_name_plural = 'categories'    # categories instead categorys(typo) in model
 
 
+# model for brand of a product
+class Brand(BaseModel):
+    pass
+
 
 # model for products
 class Product(BaseModel):
-    brand = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='products')
+    vendor = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='products')
+    brand = models.ForeignKey(Brand, on_delete=models.CASCADE, related_name='products')
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products')
     product_image = models.ImageField(upload_to='images', default='default.jpg')
-    colors = models.CharField(max_length=100)
-    product_features = models.TextField()
-    star_rating = models.CharField(max_length=10)                                     # rate based on stars like 4.4
-    percent_rating = models.CharField(max_length=10)                                  # rate based on percent like %10
+    colors = models.CharField(max_length=100, blank=True, null=True)
+    product_features = models.TextField(blank=True, null=True)
+    star_rating = models.CharField(max_length=10, blank=True, null=True)                                     # rate based on stars like 4.4
+    percent_rating = models.CharField(max_length=10, blank=True, null=True)                                  # rate based on percent like %10
     price = models.IntegerField()
     discount = models.CharField(max_length=10, blank=True, null=True)
     discounted_price = models.IntegerField(blank=True, null=True)                     # product price after calculating the discount
-    description = models.TextField()
+    description = models.TextField(blank=True, null=True)
     stock_status = models.CharField(max_length=50, blank=True, null=True)             # condition of the product in the stock
     hits = models.ManyToManyField(IPAddress, blank=True, related_name='hits')
 
