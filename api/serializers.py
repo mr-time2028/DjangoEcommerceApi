@@ -1,14 +1,13 @@
-from django.db.models import fields
 from rest_framework import serializers
-from rest_framework.fields import CharField
-from products.models import Product, Category
+from products.models import Product, Category, Brand
 from django.utils.text import slugify
 
 
 # Product model serializer
 class ProductSerializer(serializers.ModelSerializer):
-    brand = serializers.PrimaryKeyRelatedField(source='brand.username', read_only=True, default=serializers.CurrentUserDefault())          # instead showing 'pk' (related to ForeignKey), showing 'username' of user.
+    vendor = serializers.PrimaryKeyRelatedField(source='vendor.username', read_only=True, default=serializers.CurrentUserDefault())          # instead showing 'pk' (related to ForeignKey), showing 'username' of user.
     category = serializers.CharField(source='category.name')                                 # instead showing 'pk' (related to ForeignKey), showing 'name' of category instance.
+    brand = serializers.CharField(source='brand.name')                                 # instead showing 'pk' (related to ForeignKey), showing 'name' of brand instance.
     hits = serializers.IntegerField(source='hits.count', read_only=True)        #‌ return count of ip_address that see the product
 
     class Meta:
@@ -16,6 +15,7 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'name',
+            'vendor',
             'brand',
             'category',
             'product_image',
@@ -51,24 +51,26 @@ class ProductSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         # make product object to save in the database.
         return Product.objects.create(
-            brand=self.context["request"].user,
+            vendor=self.context["request"].user,
+            brand=self.make_new_object(Brand, validated_data),
             category=self.make_new_object(Category, validated_data),
             **validated_data
         )
 
 
     def update(self, instance, validated_data):
-        #‌ edit category field.
-        try:
-            instance.category = self.make_new_object(Category, validated_data)
-        # category field not edited 
-        except:
-            instance.category = instance.category
+        # #‌ edit category field.
+        # try:
+        instance.category = self.make_new_object(Category, validated_data)
+        instance.brand = self.make_new_object(Brand, validated_data)
+        # # category field not edited 
+        # except:
+        #     instance.category = instance.category
         
         for (key, value) in validated_data.items():
             setattr(instance, key, value)
 
-        instance.product_image = instance.product_image 
+        # instance.product_image = instance.product_image 
 
         instance.save()
         return instance

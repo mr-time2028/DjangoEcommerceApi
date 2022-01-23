@@ -52,13 +52,13 @@ class ProductViewSet(viewsets.ViewSet):
 
 
     def list(self, request):
-        products = self.queryset.filter(brand=request.user)       #‌ every user(vendor) just can see own products.
+        products = self.queryset.filter(vendor=request.user)       #‌ every user(vendor) just can see own products.
         serializer = self.serializer_class(products, many=True, context={"request":request})
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
     def retrieve(self, request, pk=None):
-        product = get_object_or_404(self.queryset.filter(brand=request.user), pk=pk)
+        product = get_object_or_404(self.queryset.filter(vendor=request.user), pk=pk)
         ip_address = self.get_ip_address(request)     #‌ get user ip address
         if ip_address not in product.hits.all():      #‌ check this ip address visit this product before or not.
             product.hits.add(ip_address)              # if no visit before add to hits the current ip address.
